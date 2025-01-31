@@ -27,10 +27,10 @@ const AdministracaoRestaurantes = () => {
 	return (
 		<TableContainer>
 			<Table>
-				<TableHead>
+				<TableHead style={{ backgroundColor: '#1976d2' }}>
 					<TableRow>
-						<TableCell>Nome</TableCell>						
-						<TableCell colSpan={2}>Opções</TableCell>
+						<TableCell style={{ color: 'white' }}>Nome</TableCell>						
+						<TableCell style={{ color: 'white' }} colSpan={2}>Opções</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
