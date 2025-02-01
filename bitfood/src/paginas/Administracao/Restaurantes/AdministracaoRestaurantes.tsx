@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import http from "../../../http"
 import IRestaurante from "../../../interfaces/IRestaurante"
 
@@ -25,12 +25,12 @@ const AdministracaoRestaurantes = () => {
 	}
 
 	return (
-		<TableContainer>
+		<TableContainer component={Paper}>
 			<Table>
-				<TableHead style={{ backgroundColor: '#1976d2' }}>
+				<TableHead style={{ backgroundColor: '#e5e5e5' }}>
 					<TableRow>
-						<TableCell style={{ color: 'white' }}>Nome</TableCell>						
-						<TableCell style={{ color: 'white' }} colSpan={2}>Opções</TableCell>
+						<TableCell>Nome</TableCell>						
+						<TableCell colSpan={2}>Opções</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
@@ -53,7 +53,6 @@ const AdministracaoRestaurantes = () => {
 				</TableBody>
 			</Table>				
 		</TableContainer>
-
 	)
 }
 
