@@ -27,7 +27,7 @@ const AdministracaoPratos: React.FC = () => {
     return (
         <TableContainer component={Paper}>
 			<Table>
-				<TableHead style={{ backgroundColor: '#e5e5e5' }}>
+				<TableHead style={{ backgroundColor: '#608ceb' }}>
 					<TableRow>
 						<TableCell>Nome</TableCell>                        
                         <TableCell>Tag</TableCell>
