@@ -10,7 +10,7 @@ const FormularioPrato: React.FC = () => {
     const [prato, setPrato] = useState<IPrato>({ nome: '', descricao: '', tag: '', imagem: '', restaurante: 0, id: 0 })
     const [tags, setTags] = useState<ITag[]>([])
     const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([])
-    const [ImageBitmap, setImageBitmap] = useState<File | null>()
+    const [imagem, setImagem] = useState<File | null>()
 
     const aoAlterarCampo = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -25,9 +25,9 @@ const FormularioPrato: React.FC = () => {
 
     const selecionaArquivo = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            setImageBitmap(e.target.files[0])
+            setImagem(e.target.files[0])
         } else {
-            setImageBitmap(null)
+            setImagem(null)
         }
     }
 
@@ -102,7 +102,7 @@ const FormularioPrato: React.FC = () => {
                     </Select>
                 </FormControl>
                 
-                <input type="file" accept="image/*" 
+                <input type="file" accept="image/*"
                     onChange={selecionaArquivo} />                
 
                 <Button
