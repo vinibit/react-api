@@ -1,36 +1,61 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material'
 import http from '../../../http';
 import ITag from '../../../interfaces/ITag';
 import IPrato from '../../../interfaces/IPrato';
 import IRestaurante from '../../../interfaces/IRestaurante';
 
-const FormularioPrato: React.FC = () => {
-    
-    const [prato, setPrato] = useState<IPrato>({ nome: '', descricao: '', tag: '', imagem: '', restaurante: 0, id: 0 })
+const pratoIncial: IPrato = { 
+    nome: "", descricao: "", tag: "", imagem: "", restaurante: 0, id: 0 
+}
+
+const FormularioPrato: React.FC = () => {    
+
+    const [prato, setPrato] = useState<IPrato>(pratoIncial)
+    const [imagem, setImagem] = useState<File | null>(null)
+
     const [tags, setTags] = useState<ITag[]>([])
     const [restaurantes, setRestaurantes] = useState<IRestaurante[]>([])
-    const [imagem, setImagem] = useState<File | null>()
 
-    const aoAlterarCampo = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setPrato({ ...prato, [name]: value })
+    const aoEditarCampo = (nome: string, valor: Object) => {  
+        setPrato({ ...prato, [nome]: valor })
+    } 
+    
+    const selecionaArquivo = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let imagem = null
+        if (e.target.files && e.target.files.length > 0) {
+            imagem = e.target.files[0]
+        }
+        setImagem(imagem)
     }
-
+    
     const aoSubmeterForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle form submission logic here
-        console.log(prato);
-    }
+        
+        const formData = new FormData();
+        formData.append("nome", prato.nome)
+        formData.append("descricao", prato.descricao)
+        formData.append("tag", prato.tag)
+        formData.append("restaurante", prato.restaurante.toString())
 
-    const selecionaArquivo = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setImagem(e.target.files[0])
-        } else {
-            setImagem(null)
+        if (imagem) {
+            formData.append("imagem", imagem)
         }
-    }
 
+        http.request({
+            url: "pratos/",
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            data: formData
+        })
+            .then(() => {
+                setPrato(pratoIncial) 
+                alert("Prato cadastrado com sucesso!")
+            })
+            .catch(error => console.log(error))
+    }
     useEffect(() => {
         
         http.get< {tags: ITag[]} >('tags/')
@@ -58,18 +83,20 @@ const FormularioPrato: React.FC = () => {
                 Formulário de prato
             </Typography>
             <Box component="form" sx={{ width: '100%' }} onSubmit={aoSubmeterForm}>
-                <TextField
+                
+                <TextField                    
                     value={prato.nome}
-                    onChange={aoAlterarCampo}
+                    onChange={e => aoEditarCampo('nome', e.target.value)}
                     variant="standard"
                     label="Nome do prato"
                     required
                     fullWidth
                     margin="dense" 
                 />
-                <TextField
+
+                <TextField                    
                     value={prato.descricao}
-                    onChange={aoAlterarCampo}
+                    onChange={e => aoEditarCampo('descricao', e.target.value)}
                     variant="standard"
                     label="Descrição do prato"
                     required
@@ -79,7 +106,7 @@ const FormularioPrato: React.FC = () => {
                 <FormControl margin="dense" fullWidth>
                     <InputLabel id="select-tag">Tag</InputLabel>
                     <Select labelId="select-tag" value={prato.tag} 
-                        onChange={e => setPrato({ ...prato, tag: e.target.value as string })}>
+                        onChange={e => aoEditarCampo('tag', e.target.value)}>
                         {
                             tags.map(tag => <MenuItem key={tag.id} value={tag.value}>
                                 {tag.value}
@@ -92,7 +119,7 @@ const FormularioPrato: React.FC = () => {
                     <InputLabel>Restaurante</InputLabel>
                     <Select
                         value={prato.restaurante}
-                        onChange={e => setPrato({ ...prato, restaurante: parseInt(e.target.value as string) })}
+                        onChange={e => aoEditarCampo('restaurante', parseInt(e.target.value as string))}
                     >
                         {
                             restaurantes.map(restaurante => <MenuItem key={restaurante.id} value={restaurante.id}>
