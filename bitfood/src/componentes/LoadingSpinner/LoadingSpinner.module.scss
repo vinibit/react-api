@@ -1,0 +1,48 @@
+.SpinnerContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+
+    div {
+        position: relative;
+        top: 10px;
+    }   
+}
+
+.Spinner {
+    border: 4px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    border-top: 4px solid #444;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+
+    &--Text {
+        margin-top: 10px;
+    }
+}
+
+.Show {
+    display: flex;
+}
+
+.Hide {
+    display: none;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
